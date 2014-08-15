@@ -8,7 +8,7 @@ opts_chunk$set(echo=TRUE, results='asis')
 
 ## Loading and preprocessing the data
 
-Read in the data.
+The following code is used to read in the data in to R:
 ```{r}
 if(!file.exists('activity.csv')){
     unzip('activity.zip')
@@ -16,7 +16,7 @@ if(!file.exists('activity.csv')){
 activity <- read.csv('activity.csv')
 ```
 
-Create a date.time column that combines the date and interval columns.
+The following code is used to create a date.time column that combines the date and interval columns.
 ```{r}
 time <- formatC(activity$interval / 100, 2, format='f')
 activity$date.time <- as.POSIXct(paste(activity$date, time),
@@ -24,7 +24,7 @@ activity$date.time <- as.POSIXct(paste(activity$date, time),
                                  tz='GMT')
 ```
 
-For analyzing the means at the different times of day, it will also be convenient to have a time column. To do this, I convert all of the dates to be for today. since we only care about the time for that column, it will help us with the analysis.
+I create a time colum for the purposes of For analyzing the means at the different times of day.
 ```{r}
 activity$time <- format(activity$date.time, format='%H:%M:%S')
 activity$time <- as.POSIXct(activity$time, format='%H:%M:%S')
@@ -37,13 +37,13 @@ First, calculate the mean number of steps for each day:
 total.steps <- tapply(activity$steps, activity$date, sum, na.rm=TRUE)
 ```
 
-Let's look at the mean and median for the total steps per day:
+The following are the mean and median for the total steps per day:
 ```{r}
 mean(total.steps)
 median(total.steps)
 ```
 
-And let's take a look at the distribution of total number of steps per day with a histogram:
+The following histogram displays the distribution of total number of steps per day:
 ```{r histogram}
 library(ggplot2)
 qplot(total.steps, xlab='Total steps', ylab='Frequency')
@@ -52,7 +52,7 @@ qplot(total.steps, xlab='Total steps', ylab='Frequency')
 
 ## What is the average daily activity pattern?
 
-Calculate the mean steps for each five minute interval, and then put it in a data frame.
+Here, we calculate the mean steps for each five minute interval, and then put it in a data frame.
 ```{r}
 mean.steps <- tapply(activity$steps, activity$time, mean, na.rm=TRUE)
 daily.pattern <- data.frame(time=as.POSIXct(names(mean.steps)),
